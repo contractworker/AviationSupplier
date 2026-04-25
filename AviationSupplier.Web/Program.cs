@@ -1,7 +1,11 @@
+using AviationSupplier.Web.Data.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<ICountryRepository, CountryRepository>();
 
 var app = builder.Build();
 
