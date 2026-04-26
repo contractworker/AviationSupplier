@@ -19,6 +19,36 @@ namespace AviationSupplier.Web.Controllers
             return View(data);
         }
 
+        public IActionResult Create()
+        {
+            var model = new Customer();
+            return View(model);
+        }
+
+        // POST: Customer/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Customer model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+                // 🔥 This includes CustomerAddresses automatically
+                _service.Create(model);
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
+        }
+
         #region Ajax
 
         public JsonResult GetCustomers()

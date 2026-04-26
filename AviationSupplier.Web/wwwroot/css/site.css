@@ -1,45 +1,141 @@
+/* =========================
+   GLOBAL
+========================= */
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+/* =========================
+   LAYOUT
+========================= */
+
+.d-flex {
+    display: flex;
+}
+
+/* Main content */
+.content {
+    flex: 1;
+    padding: 20px;
+    background: #f8f9fa;
+    min-height: 100vh;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
 .sidebar {
     width: 250px;
     min-height: 100vh;
-    transition: all 0.3s;
+    background: #212529;
+    color: #fff;
+    transition: all 0.3s ease;
 }
 
     .sidebar.collapsed {
         width: 70px;
     }
 
-        .sidebar.collapsed .menu-text {
-            display: none;
-        }
+/* =========================
+   MENU TEXT
+========================= */
 
-        .sidebar.collapsed .submenu {
-            display: none;
-        }
+.menu-text {
+    transition: opacity 0.2s ease;
+    white-space: nowrap;
+}
 
-    .sidebar i {
-        width: 30px;
-        text-align: center;
-    }
+.sidebar.collapsed .menu-text {
+    display: none;
+}
+
+/* =========================
+   NAV LINKS
+========================= */
 
 .nav-link {
-    width: 100%;
+    color: #fff !important;
+    padding: 10px 12px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-/* Arrow styling */
-.arrow {
-    transition: transform 0.3s;
-    margin-left: auto;
+    .nav-link:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Active state */
+    .nav-link.active {
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+/* =========================
+   ICON ALIGNMENT
+========================= */
+
+i {
+    width: 20px;
+    text-align: center;
 }
 
-.nav-link[aria-expanded="true"] .arrow {
-    transform: rotate(90deg);
+/* =========================
+   SUBMENU
+========================= */
+
+.submenu {
+    padding-left: 18px;
+    background: rgba(255, 255, 255, 0.05);
+    border-left: 2px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Toggle icon animation */
-.toggle-btn i {
-    transition: transform 0.3s;
+    .submenu .nav-link {
+        font-size: 14px;
+        padding: 8px 10px;
+    }
+
+/* Hide submenu text when collapsed */
+.sidebar.collapsed .submenu {
+    display: none;
 }
 
-.sidebar.collapsed .toggle-btn i {
-    transform: rotate(180deg);
+/* =========================
+   TOGGLE ICON AREA
+========================= */
+
+.toggle-btn {
+    cursor: pointer;
+}
+
+/* =========================
+   TABLE (Customer Grid)
+========================= */
+
+.table {
+    background: #fff;
+}
+
+    .table thead {
+        background: #343a40;
+        color: #fff;
+    }
+
+/* =========================
+   BUTTONS
+========================= */
+
+.btn {
+    border-radius: 4px;
+}
+
+/* =========================
+   MODAL FIXES
+========================= */
+
+.modal-content {
+    border-radius: 8px;
 }
