@@ -1,35 +1,34 @@
-﻿using AviationSupplier.Web.Models;
+﻿using AviationSupplier.Web.Data.Dapper;
+using AviationSupplier.Web.Models;
 using Dapper;
-using Microsoft.Data.SqlClient;
 using System.Data;
 
 namespace AviationSupplier.Web.Data.Repositories
 {
     public class CountryRepository : ICountryRepository
     {
-        private readonly IConfiguration _config;
+        private readonly IDbConnectionFactory _dbFactory;
 
-        public CountryRepository(IConfiguration config)
+        public CountryRepository(IDbConnectionFactory dbFactory)
         {
-            _config = config;
+            _dbFactory = dbFactory;
         }
-
-        private IDbConnection Connection => new SqlConnection(_config.GetConnectionString("DefaultConnection"));
-               
+                       
         public IEnumerable<Country> GetAll()
         {
-            using var db = Connection;
-
-            return db.Query<Country>(@"SELECT Id, CountryName, CountryCode FROM Tbl_Country ORDER BY CountryName" );
+            using (var db = _dbFactory.CreateConnection())
+            {
+                return db.Query<Country>(@"SELECT Id, CountryName, CountryCode FROM Tbl_Country ORDER BY CountryName");
+            }
         }
 
         public Country GetById(int id)
         {
-            using var db = Connection;
-
-            return db.QueryFirstOrDefault<Country>(@"SELECT Id, CountryName, CountryCode FROM Tbl_Country WHERE Id = @Id",new { Id = id } );
+            using (var db = _dbFactory.CreateConnection())
+            {
+                return db.QueryFirstOrDefault<Country>(@"SELECT Id, CountryName, CountryCode FROM Tbl_Country WHERE Id = @Id", new { Id = id });
+            }
         }
-
 
     }
 }
