@@ -1,14 +1,17 @@
 ﻿using AviationSupplier.Web.Models;
+using AviationSupplier.Web.ViewModel;
 
 namespace AviationSupplier.Web.Services
 {
     public interface ICustomerService
     {
-        IEnumerable<Customer> GetAll();
-        Customer GetById(int id);
+        IEnumerable<CustomerViewModel> GetAll();
+
+        CustomerViewModel GetById(int id);
         
-        int Create(Customer customer);
-        void Update(Customer customer);
+        int Create(CustomerViewModel customer);
+
+        void Update(CustomerViewModel customer);
        
     }
 }

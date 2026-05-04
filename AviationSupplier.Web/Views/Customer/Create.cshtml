@@ -1,65 +1,166 @@
-﻿@model Customer
+﻿@using AviationSupplier.Web.ViewModel;
+@model CustomerViewModel
 
 @{
-    ViewData["Title"] = "Create Customer";
+    ViewData["Title"] = "Add Customer";
 }
 
-<div class="container">
+<div class="container-fluid">
 
-    <h3>Customer</h3>
+    <div class="row">
+        <div class="col-12 p-0">
 
-    <form method="post" action="/Customer/Create">
+            <div class="card shadow-sm mb-3">
 
-        <!-- Customer Info -->
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label>Company Name</label>
-                <input asp-for="CompanyName" class="form-control" />
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0">Add Customer</h4>
+                </div>
+
+                <div class="card-body">
+
+                    <form method="post" asp-action="Save" asp-controller="Customer" enctype="multipart/form-data">
+                        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+                        <!-- LINE 1 -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Company Name *</label>
+                                <input asp-for="CompanyName" class="form-control" required />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Contact Name</label>
+                                <input asp-for="ContactName" class="form-control" />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Website</label>
+                                <input asp-for="Website" class="form-control" />
+                            </div>
+                        </div>
+
+                        <!-- LINE 2 -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Email</label>
+                                <input asp-for="Email" type="email" class="form-control" />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Phone</label>
+                                <input asp-for="Phone" class="form-control" />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">VAT</label>
+                                <input asp-for="Vat" class="form-control" />
+                            </div>
+                        </div>
+
+                        <!-- LINE 3 -->
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Address 1</label>
+                                <input asp-for="Address1" class="form-control" />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Address 2</label>
+                                <input asp-for="Address2" class="form-control" />
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Address 3</label>
+                                <input asp-for="Address3" class="form-control" />
+                            </div>
+                        </div>
+
+                        <!-- LINE 4 -->
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <label class="form-label">City</label>
+                                <input asp-for="City" class="form-control" />
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label">State</label>
+                                <input asp-for="State" class="form-control" />
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label">Postcode</label>
+                                <input asp-for="PostCode" class="form-control" />
+                            </div>
+
+                            <div class="col-md-3">
+                                <label class="form-label">Country *</label>
+                                <br />
+                                <select asp-for="@Model.CountryId" class="form-select" required
+                                        asp-items="@(new SelectList(Model.CountryViewModels ,"CountryId", "CountryName"))">
+                                    <option value="">--Select--</option>
+                                </select>
+                            </div>
+                        </div>
+                       
+                        <!-- BUTTONS (Customer Save) -->
+                        <div class="d-flex justify-content-end gap-2 mb-3">
+                            <input type="hidden" asp-for="@Model.Id" />
+                            <a href="/Customer" class="btn btn-secondary">Cancel</a>
+                            <button type="reset" class="btn btn-primary">Reset</button>
+                            <button type="submit" class="btn btn-primary">Save Customer</button>
+                        </div>
+
+                    </form>
+
+                </div>
             </div>
 
-            <div class="col-md-6">
-                <label>Contact Name</label>
-                <input asp-for="ContactName" class="form-control" />
+            <!-- =========================
+                 CUSTOMER ADDRESS GRID (BELOW FORM)
+            ========================== -->
+
+            <div class="card shadow-sm">
+
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Customer Addresses</h5>
+
+                    <button type="button" class="btn btn-success btn-sm" id="btnAddAddress">
+                        <i class="fa fa-plus"></i> Add Address
+                    </button>
+                </div>
+
+                <div class="card-body p-0">
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped mb-0" id="addressTable">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Company</th>
+                                    <th>Contact</th>
+                                    <th>City</th>
+                                    <th>Phone</th>
+                                    <th style="width:120px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+
+                </div>
+
             </div>
+
         </div>
-
-        <!-- Addresses Section -->
-        <div class="d-flex justify-content-between align-items-center mt-4">
-            <h4>Addresses</h4>
-            <button type="button" class="btn btn-success" id="btnAddAddress">
-                Add Address
-            </button>
-        </div>
-
-        <table class="table table-bordered mt-2" id="addressTable">
-            <thead class="table-light">
-                <tr>
-                    <th>Company</th>
-                    <th>Contact</th>
-                    <th>City</th>
-                    <th>Phone</th>
-                    <th style="width:120px;">Actions</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-
-        <!-- Hidden container for posting addresses -->
-        <div id="addressInputs"></div>
-
-        <button type="submit" class="btn btn-primary mt-3">Save</button>
-
-    </form>
+    </div>
 
 </div>
 
-<!-- Modal -->
+<!-- ================= ADDRESS MODAL ================= -->
 <div class="modal fade" id="addressModal">
     <div class="modal-dialog">
         <div class="modal-content">
 
             <div class="modal-header">
-                <h5 class="modal-title">Address</h5>
+                <h5 class="modal-title">Customer Address</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
@@ -97,3 +198,15 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="~/js/customer.js"></script>
+    <script src="~/js/lookup.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            CustomerModule.init(@Model.Id);
+            LookupModule.init();
+        });
+    </script>
+}
