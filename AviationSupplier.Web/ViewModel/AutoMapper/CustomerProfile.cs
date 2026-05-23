@@ -36,7 +36,7 @@ namespace AviationSupplier.Web.ViewModel.AutoMapper
             CreateMap<CustomerAddress, CustomerAddressViewModel>();
 
             CreateMap<CustomerViewModel, Customer>()
-           .ForMember(d => d.Id, opt => opt.MapFrom(s => s.RowId))
+           .ForMember(d => d.Id, opt => opt.MapFrom(s => s.Id))
            .ForMember(d => d.VAT, opt => opt.MapFrom(s => s.Vat))
            .ForMember(d => d.AccountNo, opt => opt.MapFrom(s => s.AccountNo))
            .ForMember(d => d.CustomerAddresses,
@@ -49,7 +49,7 @@ namespace AviationSupplier.Web.ViewModel.AutoMapper
         public CustomerAddressProfile()
         {
             CreateMap<CustomerAddress, CustomerAddressViewModel>()
-             .ForMember(d => d.AddressId, o => o.MapFrom(s => s.Id))
+             .ForMember(d => d.Id, o => o.MapFrom(s => s.Id))
              .ForMember(d => d.FullAddress, o => o.MapFrom(s =>
                  string.Join(", ",
                      new[] { s.Address1, s.Address2, s.Address3, s.City, s.State, s.PostCode }

@@ -12,6 +12,14 @@ namespace AviationSupplier.Web.Services
         int Create(CustomerViewModel customer);
 
         void Update(CustomerViewModel customer);
+
+        IEnumerable<CustomerAddressViewModel> GetAllAddresses(int id);
+
+        CustomerAddressViewModel GetAddressById(int id);
+
+        int CreateAddress(CustomerAddressViewModel address);
+
+        void UpdateAddress(CustomerAddressViewModel address);
        
     }
 }

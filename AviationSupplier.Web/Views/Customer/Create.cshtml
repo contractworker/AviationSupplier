@@ -17,7 +17,13 @@
                 </div>
 
                 <div class="card-body">
-
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            @TempData["ErrorMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
                     <form method="post" asp-action="Save" asp-controller="Customer" enctype="multipart/form-data">
                         <div asp-validation-summary="All" class="text-danger mb-3"></div>
                         <!-- LINE 1 -->
@@ -155,46 +161,104 @@
 </div>
 
 <!-- ================= ADDRESS MODAL ================= -->
-<div class="modal fade" id="addressModal">
-    <div class="modal-dialog">
+<div class="modal fade" id="addressModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
 
             <div class="modal-header">
                 <h5 class="modal-title">Customer Address</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-
+            <form>
             <div class="modal-body">
 
                 <input type="hidden" id="addressIndex" />
+                <input type="hidden" id="customerId" />
+                <div class="row"><div id="validation" class="alert alert-danger d-none"></div></div>
+                <div class="row">
 
-                <div class="mb-2">
-                    <label>Company</label>
-                    <input type="text" id="addrCompany" class="form-control" />
-                </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Company Name</label>
+                        <input type="text" id="addrCompany" class="form-control" maxlength="50" />
+                    </div>
 
-                <div class="mb-2">
-                    <label>Contact</label>
-                    <input type="text" id="addrContact" class="form-control" />
-                </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Contact Name</label>
+                        <input type="text" id="addrContact" class="form-control" maxlength="50" />
+                    </div>
 
-                <div class="mb-2">
-                    <label>City</label>
-                    <input type="text" id="addrCity" class="form-control" />
-                </div>
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Address Type</label>
+                        <select id="addrType" class="form-select">
+                            <option value="1">Billing</option>
+                            <option value="2">Shipping</option>
+                            <option value="3">Office</option>
+                        </select>
+                    </div>
 
-                <div class="mb-2">
-                    <label>Phone</label>
-                    <input type="text" id="addrPhone" class="form-control" />
+                    <div class="col-md-8 mb-3">
+                        <label class="form-label">Address 1</label>
+                        <input type="text" id="addr1" class="form-control" maxlength="50" />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Address 2</label>
+                        <input type="text" id="addr2" class="form-control" maxlength="50" />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Address 3</label>
+                        <input type="text" id="addr3" class="form-control" maxlength="50" />
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">City</label>
+                        <input type="text" id="addrCity" class="form-control" maxlength="50" />
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">State</label>
+                        <input type="text" id="addrState" class="form-control" maxlength="50" />
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Post Code</label>
+                        <input type="text" id="addrPostCode" class="form-control" maxlength="50" />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Phone</label>
+                        <input type="text" id="addrPhone" class="form-control" maxlength="50" />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" id="addrEmail" class="form-control" maxlength="50" />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Country</label>
+                        <select id="addrCountry" class="form-select">
+                            <option value="1">United Kingdom</option>
+                            <option value="2">United States</option>
+                            <option value="3">Canada</option>
+                        </select>
+                    </div>
+
                 </div>
 
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="saveAddress">Save</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
+                <button type="button" class="btn btn-primary" id="saveAddress">
+                    <i class="fa fa-save"></i> Save
+                </button>
 
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+            </div>
+            </form>
         </div>
     </div>
 </div>

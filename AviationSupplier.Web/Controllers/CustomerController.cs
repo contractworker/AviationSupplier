@@ -1,7 +1,10 @@
 ﻿using AviationSupplier.Web.Models;
 using AviationSupplier.Web.Services;
 using AviationSupplier.Web.ViewModel;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AviationSupplier.Web.Controllers
 {
@@ -18,8 +21,8 @@ namespace AviationSupplier.Web.Controllers
 
         public IActionResult Index()
         {
-            var data = _service.GetAll();
-            return View(data);
+            //var data = _service.GetAll();
+            return View();
         }
 
         [HttpGet]
@@ -51,21 +54,32 @@ namespace AviationSupplier.Web.Controllers
                     }
                     else
                     {
-                        //customerViewModel = _service.Create(customerViewModel);
+                        customerViewModel.Id = _service.Create(customerViewModel);
                     }
-                    return Content("Record added successfully");
+                    //return Content("Record added successfully");
+                    return RedirectToAction("Index");
                 }
                 else
                 {
                     var errors = string.Join("<br/>", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
-                    return Content($"Validation failed: <br/> {errors}");
+                    TempData["ErrorMessage"] = $"Validation failed: <br/> {errors}";                    
                 }
             }
             catch (Exception ex)
             {
-                //_logger.Error(ex.ToString());
-                return Content(ex.ToString());
+                TempData["ErrorMessage"] = "Unable to save changes. " + " Exception " + ex.Message.ToString();
+                customerViewModel.CountryViewModels = _lookupService.GetAll();
             }
+            return View("Create", customerViewModel);
+        }
+
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
         }
 
         // POST: Customer/Create
@@ -79,8 +93,7 @@ namespace AviationSupplier.Web.Controllers
             }
 
             try
-            {
-                
+            {                
                 _service.Create(model);
 
                 return RedirectToAction("Index");
@@ -99,6 +112,51 @@ namespace AviationSupplier.Web.Controllers
             var data = _service.GetAll();
             return Json(data);
         }
+
+        [HttpGet]
+        public IActionResult GetAddresses(int customerId)
+        {
+            return Ok();
+        }
+
+
+        [HttpPost]
+        public IActionResult SaveAddress([FromBody]CustomerAddressViewModel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (model.Id > 0)
+                    {
+                        _service.UpdateAddress(model);
+                    }
+                    else
+                    {
+                        model.Id = _service.CreateAddress(model);
+                    }                    
+                }
+                else
+                {
+                    var errors = string.Join("<br/>", ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage));
+                    return Json(new
+                    {
+                        success = false,
+                        errors = $"Validation failed: <br/> {errors}"
+                });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    success = false,
+                    errors = "Unable to save changes. " + " Exception " + ex.Message.ToString()
+                });
+            }
+            return Ok();
+        }
+
 
         #endregion
     }

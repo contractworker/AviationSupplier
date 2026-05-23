@@ -112,6 +112,11 @@
 
         $("#saveAddress").on("click", function () {
             saveAddress();
+            //alert("sssss");
+        });
+
+        $("#addressModal .btn-secondary, #addressModal .btn-close").on("click", function () {
+            $("#addressModal").modal("hide");
         });
     }
 
@@ -179,28 +184,47 @@
         }
 
         var model = {
-            CompanyName: $("#addrCompany").val(),
-            ContactName: $("#addrContact").val(),
+            Id: $("#addressIndex").val() || 0,
+            CustomerId: customerId,
+            companyName: $("#addrCompany").val(),
+            contactName: $("#addrContact").val(),
+            AddressType: $("#addrType").val(),
+            Address1: $("#addr1").val(),
+            Address2: $("#addr2").val(),
+            Address3: $("#addr3").val(),
             City: $("#addrCity").val(),
-            Phone: $("#addrPhone").val()
+            State: $("#addrState").val(),
+            PostCode: $("#addrPostCode").val(),
+            Phone: $("#addrPhone").val(),
+            Email: $("#addrEmail").val(),
+            Country: $("#addrCountry").val()
         };
 
         $.ajax({
-            url: "/Customer/AddAddress",
+            url: "/Customer/SaveAddress",
             type: "POST",
-            data: {
-                customerId: customerId,
-                model: model
-            },
-            success: function () {
-                $("#addressModal").modal("hide");
-                loadAddresses();
+            contentType: "application/json",
+            data: JSON.stringify(model),
+            success: function (response) {
+                if (response.success) {
+                    $("#addressModal").modal("hide");
+                    clearModal();
+                    loadAddresses();
+                    toastr.success("Address saved successfully");
+                }
+                else {
+                    $("#validation")
+                        .removeClass("d-none")
+                        .html(response.errors);                   
+                }
             },
             error: function () {
-                alert("Error saving address");
+                alert("sssssssssss");
+                toastr.error("Error saving address");
             }
         });
     }
+
 
     function removeAddress(id) {
 
@@ -225,10 +249,19 @@
     }
 
     function clearModal() {
+        $("#addressIndex").val("");
         $("#addrCompany").val("");
         $("#addrContact").val("");
+        $("#addrType").val("1");
+        $("#addr1").val("");
+        $("#addr2").val("");
+        $("#addr3").val("");
         $("#addrCity").val("");
+        $("#addrState").val("");
+        $("#addrPostCode").val("");
         $("#addrPhone").val("");
+        $("#addrEmail").val("");
+        $("#addrCountry").val("");
     }
 
     // =============================

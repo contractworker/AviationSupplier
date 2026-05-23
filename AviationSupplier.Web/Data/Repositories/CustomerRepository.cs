@@ -15,7 +15,60 @@ namespace AviationSupplier.Web.Data.Repositories
 
         public int Create(Customer customer)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var sqlCustomer = @"
+                        INSERT INTO Tbl_Customer
+                        (
+                            AccountNo,
+                            CompanyName,
+                            ContactName,
+                            Website,
+                            Email,
+                            Phone,
+                            VAT,
+                            Address1,
+                            Address2,
+                            Address3,
+                            City,
+                            State,
+                            PostCode,
+                            DocumentPath,
+                            CountryId,
+                            StatusId
+                        )
+                        VALUES
+                        (
+                            @AccountNo,
+                            @CompanyName,
+                            @ContactName,
+                            @Website,
+                            @Email,
+                            @Phone,
+                            @VAT,
+                            @Address1,
+                            @Address2,
+                            @Address3,
+                            @City,
+                            @State,
+                            @PostCode,
+                            @DocumentPath,
+                            @CountryId,
+                            @StatusId
+                        );
+
+                        SELECT CAST(SCOPE_IDENTITY() as int);
+                    ";
+
+                using var db = _dbFactory.CreateConnection();
+                var customerId = db.QuerySingle<int>(sqlCustomer, customer);
+
+                return customerId;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public IEnumerable<Customer> GetAll()
@@ -67,7 +120,38 @@ namespace AviationSupplier.Web.Data.Repositories
 
         public void Update(Customer customer)
         {
-            throw new NotImplementedException();
+            using var db = _dbFactory.CreateConnection();
+            
+            try
+            {
+               var sqlCustomer = @"
+                        UPDATE Tbl_Customer
+                        SET
+                            AccountNo = @AccountNo,
+                            CompanyName = @CompanyName,
+                            ContactName = @ContactName,
+                            Website = @Website,
+                            Email = @Email,
+                            Phone = @Phone,
+                            VAT = @VAT,
+                            Address1 = @Address1,
+                            Address2 = @Address2,
+                            Address3 = @Address3,
+                            City = @City,
+                            State = @State,
+                            PostCode = @PostCode,
+                            DocumentPath = @DocumentPath,
+                            CountryId = @CountryId,
+                            StatusId = @StatusId
+                        WHERE Id = @Id";
+
+                db.Execute(sqlCustomer, customer);
+
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
         }
     }
 }

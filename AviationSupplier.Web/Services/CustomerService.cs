@@ -33,14 +33,13 @@ namespace AviationSupplier.Web.Services
         
         public int Create(CustomerViewModel customer)
         {
-            // 🔥 Business rule example
             if (string.IsNullOrWhiteSpace(customer.CompanyName))
                 throw new Exception("Company Name is required");
 
             // You can add more rules here later
+            var model = _mapper.Map<Customer>(customer);
 
-            //return _repo.Create(customer);
-            return 1;
+            return _repo.Create(model);          
         }
 
         public void Update(CustomerViewModel customer)
@@ -52,6 +51,25 @@ namespace AviationSupplier.Web.Services
 
             _repo.Update(model);
         }
-        
+
+        public IEnumerable<CustomerAddressViewModel> GetAllAddresses(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public CustomerAddressViewModel GetAddressById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int CreateAddress(CustomerAddressViewModel address)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateAddress(CustomerAddressViewModel address)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

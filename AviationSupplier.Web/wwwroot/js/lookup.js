@@ -9,7 +9,7 @@
     // INIT
     // =============================
     function init() {
-        loadCountry();       
+        //loadCountry();       
     }
 
     function loadCountry() {
