@@ -54,22 +54,40 @@ namespace AviationSupplier.Web.Services
 
         public IEnumerable<CustomerAddressViewModel> GetAllAddresses(int id)
         {
-            throw new NotImplementedException();
+            var data = _repo.GetAllAddresses(id);
+            var viewModel = _mapper.Map<List<CustomerAddressViewModel>>(data);
+            return viewModel;
         }
 
         public CustomerAddressViewModel GetAddressById(int id)
         {
-            throw new NotImplementedException();
+            var data = _repo.GetAddressById(id);
+            var viewModel = _mapper.Map<CustomerAddressViewModel>(data);
+            return viewModel;
         }
 
         public int CreateAddress(CustomerAddressViewModel address)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(address.CompanyName))
+                throw new Exception("Company Name is required");
+
+            // You can add more rules here later
+            var model = _mapper.Map<CustomerAddress>(address);
+
+            return _repo.CreateAddress(model);
         }
 
         public void UpdateAddress(CustomerAddressViewModel address)
         {
-            throw new NotImplementedException();
+            if (address.Id <= 0)
+                throw new Exception("Invalid address");
+
+            if (string.IsNullOrWhiteSpace(address.CompanyName))
+                throw new Exception("Company Name is required");
+
+            var model = _mapper.Map<CustomerAddress>(address);
+
+            _repo.UpdateAddress(model);
         }
     }
 }

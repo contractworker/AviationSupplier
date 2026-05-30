@@ -197,7 +197,7 @@
             PostCode: $("#addrPostCode").val(),
             Phone: $("#addrPhone").val(),
             Email: $("#addrEmail").val(),
-            Country: $("#addrCountry").val()
+            CountryId: $("#addrCountry").val()
         };
 
         $.ajax({
@@ -210,7 +210,7 @@
                     $("#addressModal").modal("hide");
                     clearModal();
                     loadAddresses();
-                    toastr.success("Address saved successfully");
+                    //toastr.success("Address saved successfully");
                 }
                 else {
                     $("#validation")
@@ -219,8 +219,9 @@
                 }
             },
             error: function () {
-                alert("sssssssssss");
-                toastr.error("Error saving address");
+                $("#validation")
+                    .removeClass("d-none")
+                    .html("Error saving address");
             }
         });
     }
@@ -244,8 +245,46 @@
     }
 
     function editAddress(id) {
-        console.log("Edit address:", id);
-        // future: load and open modal
+
+        $.ajax({
+            url: "/Customer/GetAddresses",
+            type: "GET",
+            data: { customerId: customerId },
+
+            success: function (data) {
+
+                var item = data.find(x => x.id === id);
+
+                if (!item) {
+                    alert("Address not found");
+                    return;
+                }
+
+                $("#addressIndex").val(item.id);
+                $("#addrCompany").val(item.companyName);
+                $("#addrContact").val(item.contactName);
+                $("#addrType").val(item.addressType);
+                $("#addr1").val(item.address1);
+                $("#addr2").val(item.address2);
+                $("#addr3").val(item.address3);
+                $("#addrCity").val(item.city);
+                $("#addrState").val(item.state);
+                $("#addrPostCode").val(item.postCode);
+                $("#addrPhone").val(item.phone);
+                $("#addrEmail").val(item.email);
+                $("#addrCountry").val(item.countryId);
+
+                $("#validation")
+                    .addClass("d-none")
+                    .html("");
+
+                $("#addressModal").modal("show");
+            },
+
+            error: function () {
+                alert("Failed to load address");
+            }
+        });
     }
 
     function clearModal() {

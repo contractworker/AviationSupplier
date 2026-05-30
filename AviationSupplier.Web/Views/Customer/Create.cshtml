@@ -238,11 +238,15 @@
 
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Country</label>
-                        <select id="addrCountry" class="form-select">
-                            <option value="1">United Kingdom</option>
-                            <option value="2">United States</option>
-                            <option value="3">Canada</option>
-                        </select>
+                            <select id="addrCountry" class="form-select">
+                                <option value="">-- Select Country --</option>
+                                @foreach (var country in Model.CountryViewModels)
+                                {
+                                    <option value="@country.CountryId">
+                                        @country.CountryName
+                                    </option>
+                                }
+                            </select>
                     </div>
 
                 </div>

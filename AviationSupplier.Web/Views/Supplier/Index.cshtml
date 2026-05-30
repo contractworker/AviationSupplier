@@ -1,0 +1,59 @@
+﻿@{
+    ViewData["Title"] = "Suppliers";
+}
+
+<div class="container-fluid">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Suppliers</h2>
+
+        <a href="/Supplier/Create" class="btn btn-primary">
+            <i class="fa-solid fa-plus"></i> Add Supplier
+        </a>
+    </div>
+
+    <!-- Search -->
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <input type="text"
+                   id="searchBox"
+                   class="form-control"
+                   placeholder="Search by name, email, city..." />
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover" id="supplierTable">
+            <thead class="table-dark">
+                <tr>
+                    <th style="width:60px;">Id</th>
+                    <th>Supplier Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>City</th>
+                    <th style="width:160px;">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <!-- Filled by jQuery -->
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <!-- Supplier module -->
+    <script src="~/js/supplier.js"></script>
+
+    <!-- Init -->
+    <script>
+        $(document).ready(function () {
+            SupplierModule.init();
+        });
+    </script>
+}

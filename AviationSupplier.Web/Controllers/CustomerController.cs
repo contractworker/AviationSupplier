@@ -116,7 +116,38 @@ namespace AviationSupplier.Web.Controllers
         [HttpGet]
         public IActionResult GetAddresses(int customerId)
         {
-            return Ok();
+            try
+            {
+                var addresses = _service.GetAllAddresses(customerId);
+                return Json(addresses);
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = ex.Message
+                });
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetAddressById(int id)
+        {
+            try
+            {
+                var data = _service.GetAddressById(id);
+
+                return Json(data);
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    success = false,
+                    message = ex.Message
+                });
+            }
         }
 
 
@@ -154,7 +185,11 @@ namespace AviationSupplier.Web.Controllers
                     errors = "Unable to save changes. " + " Exception " + ex.Message.ToString()
                 });
             }
-            return Ok();
+
+            return Json(new
+            {
+                success = true
+            });
         }
 
 

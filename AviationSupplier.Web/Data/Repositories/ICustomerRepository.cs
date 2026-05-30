@@ -9,6 +9,10 @@ namespace AviationSupplier.Web.Data.Repositories
         Customer GetById(int id);
         int Create(Customer customer);
         void Update(Customer customer);
-        
+        IEnumerable<CustomerAddress> GetAllAddresses(int id);
+        CustomerAddress GetAddressById(int id);
+        int CreateAddress(CustomerAddress address);
+        void UpdateAddress(CustomerAddress address);
+
     }
 }

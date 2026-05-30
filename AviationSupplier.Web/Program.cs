@@ -19,13 +19,17 @@ builder.Services.AddAutoMapper(cfg =>
     cfg.AddProfile<CustomerAddressProfile>();
 });
 
+builder.Services.AddAutoMapper(cfg => { cfg.AddProfile<SupplierProfile>(); });
+
 builder.Services.AddScoped<IDbConnectionFactory, DbConnectionFactory>();
 builder.Services.AddScoped<ICountryRepository, CountryRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<ILookupRepository, LookupRepository>();
 
 builder.Services.AddScoped<ILookupService, LookupService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<ISupplierService, SupplierService> ();
 
 var app = builder.Build();
 

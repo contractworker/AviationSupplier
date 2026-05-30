@@ -1,6 +1,7 @@
 ﻿using AviationSupplier.Web.Data.Dapper;
 using AviationSupplier.Web.Models;
 using Dapper;
+using System.Data.SqlClient;
 
 namespace AviationSupplier.Web.Data.Repositories
 {
@@ -20,41 +21,11 @@ namespace AviationSupplier.Web.Data.Repositories
                 var sqlCustomer = @"
                         INSERT INTO Tbl_Customer
                         (
-                            AccountNo,
-                            CompanyName,
-                            ContactName,
-                            Website,
-                            Email,
-                            Phone,
-                            VAT,
-                            Address1,
-                            Address2,
-                            Address3,
-                            City,
-                            State,
-                            PostCode,
-                            DocumentPath,
-                            CountryId,
-                            StatusId
+                            AccountNo,CompanyName,ContactName,Website,Email,Phone,VAT,Address1,Address2,Address3,City,State,PostCode,DocumentPath,CountryId,StatusId
                         )
                         VALUES
                         (
-                            @AccountNo,
-                            @CompanyName,
-                            @ContactName,
-                            @Website,
-                            @Email,
-                            @Phone,
-                            @VAT,
-                            @Address1,
-                            @Address2,
-                            @Address3,
-                            @City,
-                            @State,
-                            @PostCode,
-                            @DocumentPath,
-                            @CountryId,
-                            @StatusId
+                            @AccountNo,@CompanyName,@ContactName,@Website,@Email,@Phone,@VAT,@Address1,@Address2,@Address3,@City,@State,@PostCode,@DocumentPath,@CountryId,@StatusId
                         );
 
                         SELECT CAST(SCOPE_IDENTITY() as int);
@@ -153,5 +124,88 @@ namespace AviationSupplier.Web.Data.Repositories
                 throw;
             }
         }
+
+        public IEnumerable<CustomerAddress> GetAllAddresses(int customerId)
+        {
+            var sql = @"
+                     SELECT Id,CustomerId,CompanyName,ContactName,AddressType,Address1,Address2,Address3,
+                            City,State,PostCode,Phone,Email,CountryId,StatusId
+                    FROM Tbl_CustomerAddress
+                    WHERE CustomerId = @CustomerId";
+
+            using (var db = _dbFactory.CreateConnection())
+            {
+                return db.Query<CustomerAddress>(sql, new { CustomerId = customerId });
+            }
+        }
+
+        public CustomerAddress GetAddressById(int id)
+        {
+            var sql = @" SELECT Id,CustomerId,CompanyName,ContactName,AddressType,Address1,Address2,Address3,
+                            City,State,PostCode,Phone,Email,CountryId,StatusId 
+                        FROM Tbl_CustomerAddress
+                        WHERE Id = @Id";
+            using (var db = _dbFactory.CreateConnection())
+            {
+                return db.QueryFirstOrDefault<CustomerAddress>(sql, new { Id = id });
+            }
+        }
+
+        public int CreateAddress(CustomerAddress address)
+        {
+            try
+            {
+                var sqlCustomer = @"INSERT INTO Tbl_CustomerAddress
+                                (
+                                    CustomerId, CompanyName, ContactName, AddressType,
+                                    Address1, Address2, Address3, City, State, PostCode,
+                                    Phone, Email, CountryId, StatusId
+                                )
+                                VALUES
+                                (
+                                    @CustomerId, @CompanyName, @ContactName, @AddressType,
+                                    @Address1, @Address2, @Address3, @City, @State, @PostCode,
+                                    @Phone, @Email, @CountryId, @StatusId
+                                )
+                                SELECT CAST(SCOPE_IDENTITY() as int);";               
+
+                using var db = _dbFactory.CreateConnection();
+                var Id = db.QuerySingle<int>(sqlCustomer, address);
+
+                return Id;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        public void UpdateAddress(CustomerAddress address)
+        {
+            
+            var sql = @"
+                    UPDATE Tbl_CustomerAddress
+                    SET
+                        CustomerId = @CustomerId,
+                        CompanyName = @CompanyName,
+                        ContactName = @ContactName,
+                        AddressType = @AddressType,
+                        Address1 = @Address1,
+                        Address2 = @Address2,
+                        Address3 = @Address3,
+                        City = @City,
+                        State = @State,
+                        PostCode = @PostCode,
+                        Phone = @Phone,
+                        Email = @Email,
+                        CountryId = @CountryId,
+                        StatusId = @StatusId
+                    WHERE Id = @Id";
+
+            using (var db = _dbFactory.CreateConnection())
+            {
+                db.Execute(sql, address);
+            }
+        }
+
     }
 }
